@@ -4,7 +4,7 @@ from flask import Flask
 from flask import render_template
 from flask_restful import Api
 
-app = Flask(__name__)
+application = app = Flask(__name__)
 api = Api(app)
 
 s3 = boto3.client('s3')
