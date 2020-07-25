@@ -19,6 +19,7 @@ def load_dataframe(file_name):
 @application.route('/index')
 def index():
     confirmed_df = load_dataframe('Colombia_confirmed.csv')
+    confirmed_df.fillna(0, inplace=True)
     deaths_df = load_dataframe('Colombia_deaths.csv')
     recovered_df = load_dataframe('Colombia_recovered.csv')
 

@@ -5,3 +5,4 @@ Archive/**
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+web-app.zip
