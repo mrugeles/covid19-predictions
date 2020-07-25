@@ -1,5 +1,6 @@
 .idea/**
 covid-app/**
+Archive/**
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

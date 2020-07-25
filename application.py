@@ -4,19 +4,19 @@ from flask import Flask
 from flask import render_template
 from flask_restful import Api
 
-application = app = Flask(__name__)
-api = Api(app)
+application = Flask(__name__)
+api = Api(application)
 
 s3 = boto3.client('s3')
 
 
 def load_dataframe(file_name):
-    obj = s3.get_object(Bucket='co.data.covid19', Key=f'countries/{file_name}')
+    obj = s3.get_object(Bucket='co.data.covid19-us-east-2', Key=f'countries/{file_name}')
     return pd.read_csv(obj['Body'])
 
 
-@app.route('/')
-@app.route('/index')
+@application.route('/')
+@application.route('/index')
 def index():
     confirmed_df = load_dataframe('Colombia_confirmed.csv')
     deaths_df = load_dataframe('Colombia_deaths.csv')
@@ -43,4 +43,5 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3001, debug=True)
+    application.debug = True
+    application.run()
