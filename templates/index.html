@@ -5,28 +5,31 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Covid-19 Projections</h1>
 </div>
-
+<div>
+    <a href="https://github.com/CSSEGISandData/COVID-19" target="_top"> COVID-19 Data Repository</a> by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University.
+</div>
+<br/>
 <div class="row">
     <div class="col-xl-12">
         <div class="card shadow">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Daily cases</h6>
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Daily cases</h6>
+            </div>
+            <div class="card-body" style="height:500px;">
+                <div class="chart-area">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
                         </div>
-                        <div class="card-body">
-                            <div class="chart-area">
-                                <div class="chartjs-size-monitor">
-                                    <div class="chartjs-size-monitor-expand">
-                                        <div class=""></div>
-                                    </div>
-                                    <div class="chartjs-size-monitor-shrink">
-                                        <div class=""></div>
-                                    </div>
-                                </div>
-                                <canvas id="confirmed" width="1166" height="640" class="chartjs-render-monitor" style="display: block; height: 320px; width: 583px;"></canvas>
-                            </div>
-                            <hr>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
                         </div>
                     </div>
+                    <div id="daily_cases"></div>
+                </div>
+                <hr>
+            </div>
+        </div>
     </div>
 </div>
 <br/>
@@ -36,7 +39,7 @@
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Cases predictions</h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="height:500px">
                             <div class="chart-area">
                                 <div class="chartjs-size-monitor">
                                     <div class="chartjs-size-monitor-expand">
@@ -46,150 +49,156 @@
                                         <div class=""></div>
                                     </div>
                                 </div>
-                                <canvas id="confirmed_predictions" width="1166" height="640" class="chartjs-render-monitor" style="display: block; height: 320px; width: 583px;"></canvas>
+                                <div id="confirmed_predictions"></div>
                             </div>
                             <hr>
                         </div>
                     </div>
     </div>
 </div>
-
 <br/>
 <div class="row">
     <div class="col-xl-12">
         <div class="card shadow">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Death predictions</h6>
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Death predictions</h6>
+            </div>
+            <div class="card-body" style="height:500px">
+                <div class="chart-area">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
                         </div>
-                        <div class="card-body">
-                            <div class="chart-area">
-                                <div class="chartjs-size-monitor">
-                                    <div class="chartjs-size-monitor-expand">
-                                        <div class=""></div>
-                                    </div>
-                                    <div class="chartjs-size-monitor-shrink">
-                                        <div class=""></div>
-                                    </div>
-                                </div>
-                                <canvas id="death_predictions" width="1166" height="640" class="chartjs-render-monitor" style="display: block; height: 320px; width: 583px;"></canvas>
-                            </div>
-                            <hr>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
                         </div>
                     </div>
+                    <div id="death_predictions"></div>
+                </div>
+                <hr>
+            </div>
+        </div>
     </div>
 </div>
-
 <br/>
 <div class="row">
     <div class="col-xl-12">
         <div class="card shadow">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Recovered predictions</h6>
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Recovered predictions</h6>
+            </div>
+            <div class="card-body" style="height:500px">
+                <div class="chart-area">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
                         </div>
-                        <div class="card-body">
-                            <div class="chart-area">
-                                <div class="chartjs-size-monitor">
-                                    <div class="chartjs-size-monitor-expand">
-                                        <div class=""></div>
-                                    </div>
-                                    <div class="chartjs-size-monitor-shrink">
-                                        <div class=""></div>
-                                    </div>
-                                </div>
-                                <canvas id="recovered_predictions" height="800" class="chartjs-render-monitor" style="display: block; height: 320px; width: 583px;"></canvas>
-                            </div>
-                            <hr>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
                         </div>
                     </div>
+                    <div id="recovered_predictions"></div>
+                </div>
+                <hr>
+            </div>
+        </div>
     </div>
 </div>
+
 <script src="{{ url_for('static', filename='vendor/chart.js/Chart.min.js') }}"></script>
-
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script>
 
-Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-Chart.defaults.global.defaultFontColor = '#858796';
+function plot_daily_cases(){
+    var confirmed = {
+      x: {{labels | tojson}},
+      y: {{confirmed | tojson}},
+      name: 'Confirmed',
+      type: 'scatter'
+    };
 
-window.chartColors = {
-	red: 'rgb(255, 99, 132)',
-	orange: 'rgb(255, 159, 64)',
-	yellow: 'rgb(255, 205, 86)',
-	green: 'rgb(75, 192, 192)',
-	blue: 'rgb(54, 162, 235)',
-	purple: 'rgb(153, 102, 255)',
-	grey: 'rgb(201, 203, 207)'
-};
+    var deaths = {
+      x: {{labels | tojson}},
+      y: {{deaths | tojson}},
+      name: 'Deaths',
+      type: 'scatter'
+    };
 
+    var recovered = {
+      x: {{labels | tojson}},
+      y: {{recovered | tojson}},
+      name: 'Recovered',
+      type: 'scatter'
+    };
 
-var ctx = document.getElementById("confirmed");
-var myLineChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: {{labels | tojson}},
-    datasets: [{
-      label: "Confirmed Cases",
-	  backgroundColor: window.chartColors.red,
-	  borderColor: window.chartColors.red,
-      data: {{confirmed | tojson}},
-      fill: false,
-    },{
-      label: "Deaths",
- 	  backgroundColor: window.chartColors.blue,
-	  borderColor: window.chartColors.blue,
-	  data: {{deaths | tojson}},
-	  fill: false,
-    },{
-      label: "Recovered",
- 	  backgroundColor: window.chartColors.green,
-	  borderColor: window.chartColors.green,
-	  data: {{recovered | tojson}},
-	  fill: false,
-    }],
-  },
-  options: {
-   maintainAspectRatio: false,
-    legend: {
-      display: true
-    },
+    var data = [confirmed, deaths, recovered];
 
-  }
-});
-
-plot_predictions("confirmed_predictions", {{predicted_labels | tojson}}, "Reported cases", "Predictions", {{acumulated_confirmed | tojson}}, {{predictions_confirmed | tojson}})
-plot_predictions("death_predictions", {{predicted_labels | tojson}}, "Reported deaths", "Predictions", {{acumulated_deaths | tojson}}, {{predictions_deaths | tojson}})
-plot_predictions("recovered_predictions",{{predicted_labels | tojson}}, "Reported recovered", "Predictions", {{acumulated_recovered | tojson}}, {{predictions_recovered | tojson}})
-
-function plot_predictions(id, labels, label_reported, label_predicted, acumulated, predictions){
-    var ctx = document.getElementById(id);
-    var myLineChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: label_reported,
-          backgroundColor: window.chartColors.red,
-          borderColor: window.chartColors.red,
-          data: acumulated,
-          fill: false,
-          //pointRadius: 1
-        },{
-          label: label_predicted,
-          backgroundColor: window.chartColors.blue,
-          borderColor: window.chartColors.blue,
-          data: predictions,
-          fill: false,
-          pointRadius: 1,
-          borderDash: [2, 2]
-        }],
-      },
-      options: {
-       maintainAspectRatio: false,
-        legend: {
-          display: true
-        },
-
+    var layout = {
+      title: 'Daily cases',
+      legend: {
+        y: 0.5,
+        traceorder: 'reversed',
+        font: {
+          size: 16
+        }
       }
-    });
+    };
+
+    var config = {
+        responsive: true,
+        displayModeBar: false
+    }
+    Plotly.newPlot('daily_cases', data, layout, config);
 }
+
+function plot_predictions(div_id, title, label_reported, label_predicted, acumulated, predictions){
+    var reported = {
+      x: label_reported,
+      y: acumulated,
+      name: 'Reported',
+      mode: 'lines+markers',
+      marker: { size: 5, color: 'green' },
+      type: 'scatter'
+    };
+
+    var predicted = {
+      x: label_predicted,
+      y: predictions,
+      name: 'Predicted',
+      mode: 'markers',
+      marker: { size: 3 },
+      type: 'scatter'
+    };
+
+    var data = [predicted, reported];
+
+    var layout = {
+      title: title,
+      xaxis: {
+        type: 'date'
+      },
+      legend: {
+        y: 0.5,
+        traceorder: 'reversed',
+        font: {
+          size: 16
+        }
+      }
+    };
+
+    var config = {
+        responsive: true,
+        displayModeBar: false
+    }
+    Plotly.newPlot(div_id, data, layout, config);
+}
+
+
+plot_daily_cases()
+plot_predictions("confirmed_predictions", 'Confirmed projections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_confirmed | tojson}}, {{predictions_confirmed | tojson}})
+plot_predictions("death_predictions", 'Deaths prejections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_deaths | tojson}}, {{predictions_deaths | tojson}})
+plot_predictions("recovered_predictions", 'Recovered projections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_recovered | tojson}}, {{predictions_recovered | tojson}})
+
+
 </script>
 {% endblock %}
