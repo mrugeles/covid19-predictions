@@ -1,7 +1,7 @@
 import pandas as pd
 import boto3
 from flask import Flask
-from flask import render_template
+from flask import render_template, request
 from flask_restful import Api
 
 application = Flask(__name__)
@@ -19,20 +19,22 @@ def load_dataframe(file_name):
 @application.route('/')
 @application.route('/index')
 def index():
+    country = request.args.get('country', 'Colombia')
     countries_df = load_dataframe('processed_countries.csv')
-
-    confirmed_df = load_dataframe('countries/Colombia_confirmed.csv')
+    print(f'countries/{country}_confirmed.csv')
+    confirmed_df = load_dataframe(f'countries/{country}_confirmed.csv')
     confirmed_df.fillna(0, inplace=True)
-    deaths_df = load_dataframe('countries/Colombia_deaths.csv')
-    recovered_df = load_dataframe('countries/Colombia_recovered.csv')
+    deaths_df = load_dataframe(f'countries/{country}_deaths.csv')
+    recovered_df = load_dataframe(f'countries/Colombia_recovered.csv')
 
-    predicted_confirmed_df = load_dataframe('countries/Colombia_predicted_confirmed.csv')
-    predicted_deaths_df = load_dataframe('countries/Colombia_predicted_deaths.csv')
-    predicted_recovered_df = load_dataframe('countries/Colombia_predicted_recovered.csv')
+    predicted_confirmed_df = load_dataframe(f'countries/{country}_predicted_confirmed.csv')
+    predicted_deaths_df = load_dataframe(f'countries/{country}_predicted_deaths.csv')
+    predicted_recovered_df = load_dataframe(f'countries/{country}_predicted_recovered.csv')
 
     return render_template(
         'index.html',
-        countries = list(countries_df['country'].values),
+        country=country,
+        countries=list(countries_df['country'].values),
         labels=list(confirmed_df['date'].values),
         predicted_labels=list(predicted_confirmed_df['date'].values),
         confirmed=list(confirmed_df['daily_cases'].values),
