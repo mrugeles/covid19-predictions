@@ -2,11 +2,37 @@
 
 {% block content %}
 <!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Covid-19 Projections</h1>
+
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Covid-19 Projections</h1>
+        </div>
+        <div>
+            <a href="https://github.com/CSSEGISandData/COVID-19" target="_top"> COVID-19 Data Repository</a> by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University.
+        </div>
+        <div>
+            <br/>
+            <!--
+            <form autocomplete="off" action="/">
+                <div class="autocomplete" style="width:300px;">
+                    <input id="country" type="text" name="country" placeholder="Select country ...">
+                </div>
+                <input type="submit">
+            </form>
+            -->
+        </div>
+    </div>
 </div>
-<div>
-    <a href="https://github.com/CSSEGISandData/COVID-19" target="_top"> COVID-19 Data Repository</a> by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University.
+<br/>
+
+<div class="card shadow">
+    <div class="card-body">
+        <div>
+            <h1 class="h3 text-center">{{country}}</h1>
+        </div>
+    </div>
 </div>
 <br/>
 <div class="row">
@@ -105,7 +131,6 @@
     </div>
 </div>
 
-<script src="{{ url_for('static', filename='vendor/chart.js/Chart.min.js') }}"></script>
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script>
 
@@ -196,7 +221,7 @@ function plot_predictions(div_id, title, label_reported, label_predicted, acumul
 
 plot_daily_cases()
 plot_predictions("confirmed_predictions", 'Confirmed projections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_confirmed | tojson}}, {{predictions_confirmed | tojson}})
-plot_predictions("death_predictions", 'Deaths prejections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_deaths | tojson}}, {{predictions_deaths | tojson}})
+plot_predictions("death_predictions", 'Deaths projections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_deaths | tojson}}, {{predictions_deaths | tojson}})
 plot_predictions("recovered_predictions", 'Recovered projections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_recovered | tojson}}, {{predictions_recovered | tojson}})
 
 

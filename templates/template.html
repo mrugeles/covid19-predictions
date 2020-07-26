@@ -17,6 +17,8 @@
 
   <!-- Custom styles for this template-->
   <link href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/autocomplete.css') }}" rel="stylesheet">
+
 
 </head>
 
@@ -65,8 +67,16 @@
 
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-
+          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" id="country" name="country" class="form-control bg-light border-0 small" placeholder="Select country..." aria-label="" aria-describedby="">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
         </nav>
         <!-- End of Topbar -->
 
@@ -143,7 +153,12 @@
   <!-- Custom scripts for all pages-->
   <script src="{{ url_for('static', filename='js/sb-admin-2.min.js') }}"></script>
 
+  <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
 
+  <script>
+    autocomplete(document.getElementById("country"), {{countries | tojson}});
+
+  </script>
 </body>
 
 </html>

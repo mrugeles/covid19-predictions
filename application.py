@@ -1,34 +1,40 @@
 import pandas as pd
 import boto3
 from flask import Flask
-from flask import render_template
+from flask import render_template, request
 from flask_restful import Api
 
 application = Flask(__name__)
 api = Api(application)
 
 s3 = boto3.client('s3')
+s3_bucket = 'co.data.covid19-us-east-2'
 
 
 def load_dataframe(file_name):
-    obj = s3.get_object(Bucket='co.data.covid19-us-east-2', Key=f'countries/{file_name}')
+    obj = s3.get_object(Bucket=s3_bucket, Key=file_name)
     return pd.read_csv(obj['Body'])
 
 
 @application.route('/')
 @application.route('/index')
 def index():
-    confirmed_df = load_dataframe('Colombia_confirmed.csv')
+    country = request.args.get('country', 'Colombia')
+    countries_df = load_dataframe('processed_countries.csv')
+    print(f'countries/{country}_confirmed.csv')
+    confirmed_df = load_dataframe(f'countries/{country}_confirmed.csv')
     confirmed_df.fillna(0, inplace=True)
-    deaths_df = load_dataframe('Colombia_deaths.csv')
-    recovered_df = load_dataframe('Colombia_recovered.csv')
+    deaths_df = load_dataframe(f'countries/{country}_deaths.csv')
+    recovered_df = load_dataframe(f'countries/Colombia_recovered.csv')
 
-    predicted_confirmed_df = load_dataframe('Colombia_predicted_confirmed.csv')
-    predicted_deaths_df = load_dataframe('Colombia_predicted_deaths.csv')
-    predicted_recovered_df = load_dataframe('Colombia_predicted_recovered.csv')
+    predicted_confirmed_df = load_dataframe(f'countries/{country}_predicted_confirmed.csv')
+    predicted_deaths_df = load_dataframe(f'countries/{country}_predicted_deaths.csv')
+    predicted_recovered_df = load_dataframe(f'countries/{country}_predicted_recovered.csv')
 
     return render_template(
         'index.html',
+        country=country,
+        countries=list(countries_df['country'].values),
         labels=list(confirmed_df['date'].values),
         predicted_labels=list(predicted_confirmed_df['date'].values),
         confirmed=list(confirmed_df['daily_cases'].values),
