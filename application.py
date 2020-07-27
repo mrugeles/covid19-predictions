@@ -25,7 +25,7 @@ def index():
     confirmed_df = load_dataframe(f'countries/{country}_confirmed.csv')
     confirmed_df.fillna(0, inplace=True)
     deaths_df = load_dataframe(f'countries/{country}_deaths.csv')
-    recovered_df = load_dataframe(f'countries/Colombia_recovered.csv')
+    recovered_df = load_dataframe(f'countries/{country}_recovered.csv')
 
     predicted_confirmed_df = load_dataframe(f'countries/{country}_predicted_confirmed.csv')
     predicted_deaths_df = load_dataframe(f'countries/{country}_predicted_deaths.csv')
