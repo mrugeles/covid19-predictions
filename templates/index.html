@@ -1,18 +1,51 @@
 {% extends "template.html" %}
 
 {% block content %}
-<!-- Page Heading -->
+    <div class="subheader py-2 py-lg-4  subheader-solid " id="kt_subheader">
+    <div class=" container-fluid  d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+      <div class="d-flex align-items-center flex-wrap mr-2">
+          <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">
+              Predictions
+          </h5>
+          <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-5 bg-gray-200"></div>
+          <div class="d-flex align-items-center" id="kt_subheader_search">
+              <span class="text-dark-50 font-weight-bold" id="kt_subheader_total">Select country</span>
+              <form class="ml-5" action="/">
+                <div class="input-group input-group-sm input-group-solid" >
+                    <select class="form-control " id="country" name="country">
+                        {%for country_name in countries%}
+                            {%if country_name == country%}
+                                <option value="{{country_name}}" selected>{{country_name}}
+                            {% else %}
+                                <option value="{{country_name}}">{{country_name}}
+                            {%endif%}
+                        {%endfor%}
+                    </select>
+                    &nbsp;
+                    <button type="submit"class="btn btn-primary">
+                        <i class="flaticon-graphic-2"></i> Load report
+                    </button>
+                </div>
+              </form>
+          </div>
+      </div>
 
+    </div>
+  </div>
 
-<div class="card">
-    <div class="card-body">
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex flex-column-fluid">
+        <div class=" container ">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card card-custom gutter-b card-stretch">
+                        <div class="card-body">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Covid-19 Projections</h1>
         </div>
-        <div>
+                            <div>
             <a href="https://github.com/CSSEGISandData/COVID-19" target="_top"> COVID-19 Data Repository</a> by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University.
         </div>
-        <div>
+                            <div>
             <br/>
             <!--
             <form autocomplete="off" action="/">
@@ -23,113 +56,73 @@
             </form>
             -->
         </div>
-    </div>
-</div>
-<br/>
-
-<div class="card shadow">
-    <div class="card-body">
-        <div>
-            <h1 class="h3 text-center">{{country}}</h1>
-        </div>
-    </div>
-</div>
-<br/>
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card shadow">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Daily cases</h6>
-            </div>
-            <div class="card-body" style="height:500px;">
-                <div class="chart-area">
-                    <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                            <div class=""></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink">
-                            <div class=""></div>
                         </div>
                     </div>
-                    <div id="daily_cases"></div>
                 </div>
-                <hr>
             </div>
-        </div>
-    </div>
-</div>
-<br/>
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card shadow">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Cases predictions</h6>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card card-custom gutter-b card-stretch">
+                        <div class="card-body">
+                            <div>
+                                <h1 class="h3 text-center">{{country}}</h1>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card card-custom gutter-b card-stretch">
+                        <div class="card-body" style="height:500px;">
+                            <div class="chart-area">
+                                <div id="daily_cases"></div>
+                            </div>
+            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card card-custom gutter-b card-stretch">
                         <div class="card-body" style="height:500px">
                             <div class="chart-area">
-                                <div class="chartjs-size-monitor">
-                                    <div class="chartjs-size-monitor-expand">
-                                        <div class=""></div>
-                                    </div>
-                                    <div class="chartjs-size-monitor-shrink">
-                                        <div class=""></div>
-                                    </div>
-                                </div>
                                 <div id="confirmed_predictions"></div>
                             </div>
-                            <hr>
                         </div>
                     </div>
-    </div>
-</div>
-<br/>
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card shadow">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Death predictions</h6>
-            </div>
-            <div class="card-body" style="height:500px">
-                <div class="chart-area">
-                    <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                            <div class=""></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink">
-                            <div class=""></div>
-                        </div>
-                    </div>
-                    <div id="death_predictions"></div>
                 </div>
-                <hr>
             </div>
-        </div>
-    </div>
-</div>
-<br/>
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card shadow">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Recovered predictions</h6>
-            </div>
-            <div class="card-body" style="height:500px">
-                <div class="chart-area">
-                    <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                            <div class=""></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink">
-                            <div class=""></div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card card-custom gutter-b card-stretch">
+                        <div class="card-body" style="height:500px">
+                        <div class="chart-area">
+                            <div id="death_predictions"></div>
                         </div>
                     </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card card-custom gutter-b card-stretch">
+                        <div class="card-body" style="height:500px">
+                            <div class="chart-area">
                     <div id="recovered_predictions"></div>
                 </div>
-                <hr>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+  </div>
+
+<script src="{{ url_for('static', filename='assets/plugins/global/plugins.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/plugins/custom/prismjs/prismjs.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/scripts.bundle.js') }}"></script>
+
+<script src="{{ url_for('static', filename='assets/js/pages/crud/forms/widgets/select2.js') }}"></script>
 
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script>
@@ -224,6 +217,29 @@ plot_predictions("confirmed_predictions", 'Confirmed projections', {{labels | to
 plot_predictions("death_predictions", 'Deaths projections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_deaths | tojson}}, {{predictions_deaths | tojson}})
 plot_predictions("recovered_predictions", 'Recovered projections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_recovered | tojson}}, {{predictions_recovered | tojson}})
 
+
+</script>
+
+<script>
+    var KTSelect2 = function() {
+        // Private functions
+        var dropdowns = function() {
+            // basic
+            $('#country').select2({
+                placeholder: "Select a country"
+            });
+        }
+
+        return {
+                init: function() {
+                dropdowns();
+            }
+        };
+    }();
+
+    jQuery(document).ready(function() {
+	    KTSelect2.init();
+    });
 
 </script>
 {% endblock %}
