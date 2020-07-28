@@ -6,3 +6,5 @@ Archive/**
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 web-app.zip
+.ipynb_checkpoints/**
+*.ipynb

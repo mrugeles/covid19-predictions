@@ -129,22 +129,22 @@
 
 function plot_daily_cases(){
     var confirmed = {
-      x: {{labels | tojson}},
-      y: {{confirmed | tojson}},
+      x: {{confirmed['date'].values.tolist() | tojson}},
+      y: {{confirmed['daily_cases'].values.tolist() | tojson}},
       name: 'Confirmed',
       type: 'scatter'
     };
 
     var deaths = {
-      x: {{labels | tojson}},
-      y: {{deaths | tojson}},
+      x: {{deaths['date'].values.tolist() | tojson}},
+      y: {{deaths['daily_cases'].values.tolist() | tojson}},
       name: 'Deaths',
       type: 'scatter'
     };
 
     var recovered = {
-      x: {{labels | tojson}},
-      y: {{recovered | tojson}},
+      x: {{recovered['date'].values.tolist() | tojson}},
+      y: {{recovered['daily_cases'].values.tolist() | tojson}},
       name: 'Recovered',
       type: 'scatter'
     };
@@ -213,9 +213,9 @@ function plot_predictions(div_id, title, label_reported, label_predicted, acumul
 
 
 plot_daily_cases()
-plot_predictions("confirmed_predictions", 'Confirmed projections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_confirmed | tojson}}, {{predictions_confirmed | tojson}})
-plot_predictions("death_predictions", 'Deaths projections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_deaths | tojson}}, {{predictions_deaths | tojson}})
-plot_predictions("recovered_predictions", 'Recovered projections', {{labels | tojson}} , {{predicted_labels | tojson}}, {{acumulated_recovered | tojson}}, {{predictions_recovered | tojson}})
+plot_predictions("confirmed_predictions", 'Confirmed projections', {{confirmed['date'].values.tolist() | tojson}} , {{predictions_confirmed['date'].values.tolist() | tojson}}, {{confirmed['y'].values.tolist() | tojson}}, {{predictions_confirmed['y'].values.tolist() | tojson}})
+plot_predictions("death_predictions", 'Deaths projections', {{deaths['date'].values.tolist()  | tojson}} , {{predictions_deaths['date'].values.tolist() | tojson}}, {{deaths['y'].values.tolist() | tojson}}, {{predictions_deaths['y'].values.tolist()  | tojson}})
+plot_predictions("recovered_predictions", 'Recovered projections', {{recovered['date'].values.tolist() | tojson}} , {{predictions_recovered['date'].values.tolist() | tojson}}, {{recovered['y'].values.tolist() | tojson}}, {{predictions_recovered['y'].values.tolist() | tojson}})
 
 
 </script>

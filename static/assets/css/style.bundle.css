@@ -61220,7 +61220,9 @@ body {
 .aside-menu .menu-nav {
   margin: 0;
   list-style: none;
-  padding: 15px 0; }
+  padding: 15px 0;
+  text-align: center;
+  }
   .aside-menu .menu-nav .menu-scroll {
     position: relative;
     overflow: hidden;
@@ -61591,7 +61593,7 @@ body {
     .aside-menu .menu-nav > .menu-separator .menu-separator-marginless {
       margin: 0; }
   .aside-menu .menu-nav > .menu-item > .menu-link {
-    padding: 9px 25px; }
+    padding: 9px 2px; }
   .aside-menu .menu-nav > .menu-item > .menu-submenu .menu-subnav .menu-content .menu-heading {
     padding: 0 25px;
     padding-left: 40px; }
