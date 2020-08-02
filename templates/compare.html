@@ -1,0 +1,255 @@
+{% extends "template.html" %}
+
+{% block content %}
+    <div class="subheader py-2 py-lg-4  subheader-solid " id="kt_subheader">
+    <div class=" container-fluid  d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+      <div class="d-flex align-items-center flex-wrap mr-2">
+          <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">
+              Compare countries data
+          </h5>
+      </div>
+
+    </div>
+  </div>
+
+    <div class="d-flex flex-column-fluid">
+        <div class=" container ">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card card-custom gutter-b card-stretch">
+                        <div class="card-body">
+                            <form method="post" action="/compare">
+                                <div class="form-group row">
+                                    <label class="col-form-label text-right col-lg-3 col-sm-12">Countries</label>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <input id="countries" class="form-control tagify" name='countries' value='{{post_countries | tojson}}' placeholder='type countries' required/>
+                                        <div class="invalid-feedback">
+                                            Please select at least one country.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label text-right col-lg-3 col-sm-12">Report</label>
+                                    <div class="col-9 col-form-label">
+                                        <div class="radio-inline">
+                                            <label class="radio radio-outline radio-primary">
+                                                <input type="radio" name="report" id="report_confirmed" value="confirmed" {{ 'checked' if post_report == 'confirmed' else '' }} required/>
+                                                <span></span>
+                                                Cases
+                                            </label>
+                                            <label class="radio radio-outline radio-danger">
+                                                <input type="radio" name="report" id="report_deaths" value="deaths" {{ 'checked' if post_report == 'deaths' else '' }} required/>
+                                                <span></span>
+                                                Deaths
+                                            </label>
+                                            <label class="radio radio-outline radio-success">
+                                                <input type="radio" name="report" id="report_recovered" value="recovered" {{ 'checked' if post_report == 'recovered' else '' }} required/>
+                                                <span></span>
+                                                Recovered
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12 text-center">
+                                        <button type="submit"class="btn btn-primary">
+                                            <i class="flaticon-graphic-2"></i> Load report
+                                         </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if show_plots %}
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card card-custom gutter-b card-stretch">
+                        <div class="card-body" style="height:500px;">
+                            <div class="chart-area">
+                                <div id="daily_cases"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card card-custom gutter-b card-stretch">
+                        <div class="card-body" style="height:500px;">
+                            <div class="chart-area">
+                                <div id="accumulated_cases"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {%endif%}
+        </div>
+  </div>
+
+<script src="{{ url_for('static', filename='assets/plugins/global/plugins.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/plugins/custom/prismjs/prismjs.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/js/scripts.bundle.js') }}"></script>
+
+<script src="{{ url_for('static', filename='assets/js/pages/crud/forms/widgets/select2.js') }}"></script>
+
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script>
+    var KTTagify = function() {
+
+        var countries = function() {
+            var input = document.getElementById('countries'),
+                // init Tagify script on the above inputs
+                tagify = new Tagify(input, {
+                    whitelist: {{countries['country'].values.tolist() | tojson}},
+                    transformTag: function(tagData) {
+                        tagData.class = 'tagify__tag tagify__tag--primary';
+                    }
+                })
+
+
+            // Chainable event listeners
+            tagify.on('add', onAddTag)
+                .on('remove', onRemoveTag)
+                .on('input', onInput)
+                .on('edit', onTagEdit)
+                .on('invalid', onInvalidTag)
+                .on('click', onTagClick)
+                .on('dropdown:show', onDropdownShow)
+                .on('dropdown:hide', onDropdownHide)
+
+            // tag added callback
+            function onAddTag(e) {
+                console.log("onAddTag: ", e.detail);
+                console.log("original input value: ", input.value)
+                tagify.off('add', onAddTag) // exmaple of removing a custom Tagify event
+            }
+
+            // tag remvoed callback
+            function onRemoveTag(e) {
+                console.log(e.detail);
+                console.log("tagify instance value:", tagify.value)
+            }
+
+            // on character(s) added/removed (user is typing/deleting)
+            function onInput(e) {
+                console.log(e.detail);
+                console.log("onInput: ", e.detail);
+            }
+
+            function onTagEdit(e) {
+                console.log("onTagEdit: ", e.detail);
+            }
+
+            // invalid tag added callback
+            function onInvalidTag(e) {
+                console.log("onInvalidTag: ", e.detail);
+            }
+
+            // invalid tag added callback
+            function onTagClick(e) {
+                console.log(e.detail);
+                console.log("onTagClick: ", e.detail);
+            }
+
+            function onDropdownShow(e) {
+                console.log("onDropdownShow: ", e.detail)
+            }
+
+            function onDropdownHide(e) {
+                console.log("onDropdownHide: ", e.detail)
+            }
+        }
+
+        return {
+            init: function() {
+                countries();
+            }
+        };
+    }();
+
+    jQuery(document).ready(function() {
+        KTTagify.init();
+    });
+
+
+    function plot_daily_cases(){
+         var countries = []
+        {% for country in countries_data.keys()%}
+             var {{country}}_report = {
+              x: {{countries_data[country]['date'].values.tolist() | tojson}},
+              y: {{countries_data[country]['daily_cases'].values.tolist() | tojson}},
+              name: 'Report {{post_report}} {{country}}',
+              mode: 'lines+markers',
+              marker: { size: 5},
+              type: 'scatter'
+        };
+        countries.push({{country}}_report)
+        {% endfor%}
+
+        var data = countries
+
+        var layout = {
+          title: 'Countries data, daily cases',
+          xaxis: {
+            type: 'date'
+          },
+          legend: {
+            "orientation": "h",
+            traceorder: 'reversed',
+            font: {
+              size: 14
+            },
+          }
+        };
+
+        var config = {
+            responsive: true,
+            displayModeBar: false
+        }
+        Plotly.newPlot('daily_cases', data, layout, config);
+    }
+
+    function plot_accumulated_cases(){
+         var countries = []
+        {% for country in countries_data.keys()%}
+             var {{country}}_report = {
+              x: {{countries_data[country]['date'].values.tolist() | tojson}},
+              y: {{countries_data[country]['y'].values.tolist() | tojson}},
+              name: 'Report {{post_report}} {{country}}',
+              mode: 'lines+markers',
+              marker: { size: 5},
+              type: 'scatter'
+        };
+        countries.push({{country}}_report)
+        {% endfor%}
+
+        var data = countries
+
+        var layout = {
+          title: 'Countries data, accumulated cases',
+          xaxis: {
+            type: 'date'
+          },
+          legend: {
+            "orientation": "h",
+            traceorder: 'reversed',
+            font: {
+              size: 14
+            },
+          }
+        };
+
+        var config = {
+            responsive: true,
+            displayModeBar: false
+        }
+        Plotly.newPlot('accumulated_cases', data, layout, config);
+    }
+
+    plot_daily_cases()
+    plot_accumulated_cases()
+</script>
+{% endblock %}
