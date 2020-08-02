@@ -103,14 +103,14 @@ License: You must have a valid license purchased only from themeforest(the above
          data-menu-dropdown="1" data-menu-scroll="0" data-menu-dropdown-timeout="500" 			>
         <!--begin::Menu Nav-->
         <ul class="menu-nav ">
-            <li class="menu-item  menu-item-active" aria-haspopup="true" >
+            <li class="menu-item  {{menu_items['index']}}" >
               <a  href="/" class="menu-link ">
                 <i class="menu-icon flaticon-map-location"></i>
                 <span class="menu-text">By Country</span>
               </a>
             </li>
-            <li class="menu-item  menu-item" aria-haspopup="true" >
-              <a  href="#" class="menu-link" data-toggle="popover" title="Soon: ML Bot" data-content="App to create ML Models without coding.">
+            <li class="menu-item  {{menu_items['compare']}}">
+              <a  href="/compare" class="menu-link">
                 <i class="menu-icon flaticon2-graph-2"></i>
                 <span class="menu-text">Compare countries</span>
               </a>
